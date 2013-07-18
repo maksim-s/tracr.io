@@ -19,5 +19,5 @@ All required Python packages are listed in requirements.txt and can be
 installed by running the following command:
 
 ```
-pip install -r requirements.txt
+sudo pip install -r requirements.txt
 ```
