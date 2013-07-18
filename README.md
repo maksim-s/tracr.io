@@ -15,6 +15,11 @@ by running the following command:
 sudo HOME=/tmp/ apt-get install -y $(cat packages.txt)
 ```
 
+Activate virtualenv, before we install anything project specific:
+```
+source bin/activate
+```
+
 All required Python packages are listed in requirements.txt and can be 
 installed by running the following command:
 
