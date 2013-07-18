@@ -1,9 +1,4 @@
 {
   "project_id" : "papasan",
-  "conduit_uri" : "http://phabricator.toughness.co/",
-  "lint.engine" : "PhutilLintEngine",
-  "unit.engine" : "PhutilUnitTestEngine",
-  "load" : [
-    "src/"
-  ]
+  "conduit_uri" : "http://phabricator.toughness.co/"
 }
