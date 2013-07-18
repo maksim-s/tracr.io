@@ -1,1 +1,1 @@
-git ipython-notebook libevent-dev python-pip python-dev xclip php5 php5-curl
+git ipython-notebook libevent-dev python-pip python-dev xclip php5 php5-curl python-virtualenv

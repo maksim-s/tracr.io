@@ -2,7 +2,7 @@ project-papasan
 ===============
 
 You need to setup virtualenv for each fresh checkout of this repository. You 
-can setup virtualenv by running the following command in the root directory:
+can setup virtualenv by running the following command in the project root directory:
 
 ```
 virtualenv .
