@@ -13,4 +13,9 @@ add_to_sys_path('.')
 add_to_sys_path('..')
 
 if __name__ == '__main__':
+  # Load all tests.
+  test_suites = unittest.defaultTestLoader.discover(
+      start_dir=os.path.dirname(__file__))
   runner = unittest.TextTestRunner()
+  for test_suite in test_suites:
+    runner.run(test_suite)
