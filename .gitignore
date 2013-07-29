@@ -2,7 +2,8 @@ bin/
 include/
 local/
 lib/
+share/
 *.log
 *.pot
 *.pyc
-
+*.py~
