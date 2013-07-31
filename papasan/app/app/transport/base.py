@@ -2,7 +2,7 @@ import requests
 import types
 import zlib
 
-from app.client import worker
+from app.transport import worker
 from app.conf import defaults
 
 class Transport(object):

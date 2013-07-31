@@ -2,7 +2,7 @@ import threading
 import time
 import unittest
 
-from app.client import worker
+from app.transport import worker
 
 class TestSyncWorker(unittest.TestCase):
   def setUp(self):
