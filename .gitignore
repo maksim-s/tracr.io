@@ -6,4 +6,5 @@ share/
 *.log
 *.pot
 *.pyc
+*.swp
 *.py~
