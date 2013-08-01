@@ -1,4 +1,4 @@
-project-papasan
+Tracr.io
 ===============
 
 You need to setup virtualenv for each fresh checkout of this repository. You 
