@@ -1,6 +1,6 @@
 from tracr.conf.loader import Loader
 
-class Middleware(object):
+class TracrMiddleware(object):
   """
   Main middleware that combines all handlers together.
   """
