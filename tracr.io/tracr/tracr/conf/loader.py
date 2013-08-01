@@ -36,6 +36,6 @@ class Loader(object):
 
       # TODO(maksims): we can pass settings to handlers from here.
       handler = handler_class()
-      handlers.append(handler)
+      handlers.tracr.nd(handler)
     return handlers
 

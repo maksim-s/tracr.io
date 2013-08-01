@@ -1,4 +1,4 @@
-from app.conf.loader import Loader
+from tracr.conf.loader import Loader
 
 class Middleware(object):
   """
