@@ -2,9 +2,10 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.importlib import import_module
 
+from tracr.conf import defaults
+
 
 class Loader(object):
-  default_handlers = ()
 
   def __init__(self):
     pass
@@ -12,8 +13,8 @@ class Loader(object):
   def load_handlers(self):
     handlers = []
     handler_paths = getattr(settings,
-                            'APP_HANDLERS',
-                            self.default_handlers)
+                            'TRACR_HANDLERS',
+                            defaults.TRACR_HANDLERS)
     for handler_path in handler_paths:
       try:
         separator = handler_path.rindex('.')

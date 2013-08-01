@@ -17,3 +17,8 @@ QUEUE_SIZE = 1000
 # Maximum number of seconds to wait in case the interpretter is being shutdown
 # but the AsyncWorker still has more work to do.
 SHUTDOWN_TIMEOUT = 5
+
+
+# List of handlers that the main middleware will use. Order is important.
+TRACR_HANDLERS = (
+    )

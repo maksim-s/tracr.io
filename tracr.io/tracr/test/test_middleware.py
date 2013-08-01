@@ -1,11 +1,11 @@
 import unittest
 
 from tracr.handlers.base import Handler
-from tracr.middleware import Middleware
+from tracr.middleware import TracrMiddleware
 
 class TestMiddleware(unittest.TestCase):
   def setUp(self):
-    middleware = Middleware()
+    middleware = TracrMiddleware()
     handler_a = DummyHandlerA()
     handler_b = DummyHandlerB()
     middleware.handlers = (handler_a, handler_b)
