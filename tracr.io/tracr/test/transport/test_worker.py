@@ -2,7 +2,7 @@ import threading
 import time
 import unittest
 
-from app.transport import worker
+from tracr.transport import worker
 
 class TestSyncWorker(unittest.TestCase):
   def setUp(self):
@@ -11,7 +11,7 @@ class TestSyncWorker(unittest.TestCase):
   def test_execute(self):
     """ Tests Worker.execute(...) """
     def task(array):
-      array.append(1)
+      array.tracr.nd(1)
     array = []
     self.worker.execute(task, array)
     time.sleep(1) # Wait for task to complete.
@@ -35,7 +35,7 @@ class TestAsyncWorker(TestSyncWorker):
     def task(array, item, wait_time=0):
       if wait_time:
         time.sleep(wait_time)
-      array.append(item)
+      array.tracr.nd(item)
     array = []
     # Spawn first task to block async worker.
     self.worker.execute(task, array, 0, wait_time=1)
@@ -50,7 +50,7 @@ class TestAsyncWorker(TestSyncWorker):
     """ Tests that async worker is still in the right timeout. """
     def task(array):
       time.sleep(0.01)
-      array.append(1)
+      array.tracr.nd(1)
     self.set_worker_config(1000, 5) # Shutdown timeout 5s.
     array = []
     for i in xrange(20):

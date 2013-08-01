@@ -1,7 +1,7 @@
 import time
 import unittest
 
-from app.utils.uuid import uuid1
+from tracr.utils.uuid import uuid1
 
 
 class TestUUID(unittest.TestCase):

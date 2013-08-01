@@ -1,7 +1,7 @@
 import unittest
 
-from app.handlers.base import Handler
-from app.middleware import Middleware
+from tracr.handlers.base import Handler
+from tracr.middleware import Middleware
 
 class TestMiddleware(unittest.TestCase):
   def setUp(self):

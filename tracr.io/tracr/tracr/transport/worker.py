@@ -2,13 +2,13 @@ import logging
 import Queue
 import threading
 
-from app.conf import defaults
+from tracr.conf import defaults
 
 log = logging.getLogger(__name__)
 
 class Worker(object):
   """ Interface for a worker that any instance of 
-  `app.client.transport.Transport` can use to execute tasks (e.g. sending
+  `tracr.client.transport.Transport` can use to execute tasks (e.g. sending
   a trace to ther server). """
   def __init__(self, *args, **kwargs):
     pass
@@ -32,7 +32,7 @@ class AsyncWorker(Worker):
 
     # Set up task thread.
     self._task_thread = threading.Thread(target=self._run)
-    # Make daemon so it doesn't block the application from terminating.
+    # Make daemon so it doesn't block the tracr.ication from terminating.
     self._task_thread.setDaemon(True)
     self._task_thread.start()
 
