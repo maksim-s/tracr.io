@@ -4,13 +4,13 @@ import os
 import sys
 import unittest
 
-# Append settings to conf, to be able to test as a standalone app.
+# Append settings to conf, to be able to test as a standalone tracr.
 from django import conf
 setattr(conf, 'settings', object())
 
 def add_to_sys_path(rel_path):
   """ Adds a directory to the system python path. """
-  return sys.path.append(os.path.abspath(
+  return sys.path.tracr.nd(os.path.abspath(
       os.path.join(os.path.dirname(__file__), rel_path)) + '/')
 
 add_to_sys_path('.')
