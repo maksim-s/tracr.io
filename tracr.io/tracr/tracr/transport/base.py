@@ -5,6 +5,7 @@ import zlib
 from tracr.transport import worker
 from tracr.conf import defaults
 
+
 class Transport(object):
   def __init__(self, host=defaults.HOST, async=defaults.ASYNC_WORKER,
                *args, **kwargs):
@@ -24,11 +25,12 @@ class Transport(object):
       setattr(self, attr, self.spawn_worker_task(attr_value))
 
   def spawn_worker_task(self, method):
-    def wrtracr.r(self, *args, **kwargs):
+    def wrapper(self, *args, **kwargs):
       self._worker.execute(method, *args, **kwargs)
 
   def send_trace(self, trace):
     raise NotImplemented
+
 
 class HttpTransport(Transport):
   def send_trace(self, trace):
