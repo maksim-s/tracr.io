@@ -1,6 +1,10 @@
+import atexit
 import logging
 import Queue
 import threading
+import urlparse
+
+from django.core.exceptions import ImproperlyConfigured
 
 from tracr.conf import defaults
 
@@ -34,25 +38,65 @@ class SyncWorker(Worker):
 
 class AsyncWorker(Worker):
   """ Executes all tasks in a separate daemon thread. """
+
+  class Thread(object):
+    """ Wrapper class for different concurrency models. """
+    def __init__(self, host=defaults.HOST, target=None):
+      # Add all supported *protocols* to urlparse.
+      for attr in (s for s in dir(urlparse) if s.startswith('uses_')):
+        uses = set(getattr(urlparse, attr)) | {'gevent+http',
+                                               'gevent+https'}
+        setattr(urlparse, attr, list(uses))
+
+      scheme = urlparse.urlparse(host).scheme
+      if scheme in ('http', 'https'):
+        # TODO(usmanm): Think of a more apt name. Fiber doesn't make sense but
+        # I didn't wanna use thread here.
+        self._fiber = threading.Thread(target=target)
+        # Make daemon so it doesn't block the application from terminating.
+        self._fiber.setDaemon(True)
+      elif scheme in ('gevent+http', 'gevent+https'):
+        try:
+          import gevent
+        except ImportError:
+          # TODO(usmanm): Add proper exception here.
+          raise Exception
+        self._fiber = gevent.Greenlet.spawn(target)
+        self._fiber.is_alive = lambda x: x.dead == True
+      else:
+        raise ImproperlyConfigured
+
+    def start(self):
+      self._fiber.start()
+
+    def is_alive(self):
+      return self._fiber.is_alive()
+
+    def join(self, timeout):
+      if hasattr(self._fiber, 'kill'):
+        self._fiber.kill(timeout=timeout)
+      else:
+        self._fiber.join(timeout)
+
   kill_signal = object()
   kill_task = (kill_signal, None, None, None, None)
 
   def __init__(self, queue_size=defaults.QUEUE_SIZE, 
                shutdown_timeout=defaults.SHUTDOWN_TIMEOUT, *args, **kwargs):
     self._queue = Queue.Queue(maxsize=queue_size)
-    self._shutdown_timeout = shutdown_timeout
+    self._shutdown_timeout = (shutdown_timeout if shutdown_timeout >= 0
+                              else None)
 
     # Set up task thread.
-    self._task_thread = threading.Thread(target=self._run)
-    # Make daemon so it doesn't block the application from terminating.
-    self._task_thread.setDaemon(True)
-    self._task_thread.start()
+    self._thread = AsyncWorker.Thread(target=self._run)
+    self._thread.start()
+    atexit.register(self._kill)
 
   def _kill(self):
     if not (self._shutdown_timeout and
-            self._task_thread and
-            self._task_thread.is_alive() and
-            self._queue.qsize()):
+            self._queue.qsize() and
+            self._thread and
+            self._thread.is_alive()):
       return
     log.info('AsyncWorker is flushing queued requests; '
              'will terminate in %s seconds.' % self._shutdown_timeout)
@@ -63,9 +107,8 @@ class AsyncWorker(Worker):
     except Queue.Full:
       # Just try waiting for `self._shutdown_time` now.
       pass
-    timeout = self._shutdown_timeout if self._shutdown_timeout >= 0 else None
-    self._task_thread.join(timeout)
-    self._task_thread = None
+    self._thread.join(self._shutdown_timeout)
+    self._thread = None
 
   def _run(self):
     while True:

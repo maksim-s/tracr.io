@@ -1,15 +1,12 @@
 # Should use AsyncWorker to send data to server?
 ASYNC_WORKER = True
 
-# Data collection endpoints on the papasan server.
+# Data collection endpoints on the Tracr.io server.
 ENDPOINTS = {
   }
 
-# Host name of the papasan sever.
-HOST = None
-
-# Protocol of the papasan server.
-PROTOCOL = 'https'
+# Host name of the Tracr.io sever.
+HOST = 'https://api.tracr.io/'
 
 # Maxmimum number of tasks to queue up for AsyncWorker.
 QUEUE_SIZE = 1000
