@@ -1,8 +1,22 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" class="njs">
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'
+'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html lang='en' xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' class='njs'>
   <head>
-    <title>Test Frontpage</title>
+    <title>{% block title %}Tracr.io{% endblock %}</title>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+
+    <!-- Loading Bootstrap -->
+    <link href='static/lib/flat-ui/bootstrap/css/bootstrap.css' rel='stylesheet'>
+
+    <!-- Loading Flat UI -->
+    <link href='static/lib/flat-ui/css/flat-ui.css' rel='stylesheet'>
+    {% block external %}
+    {% endblock %}
   </head>
-  <body>This is a test</body>
+  <body>
+    {% block content %}
+    {% endblock %}
+  </body>
 </html>
+
