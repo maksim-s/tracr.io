@@ -1,13 +1,28 @@
 {% extends 'base/base.html' %}
 
+{% block external %}
+  {{ block.super }}
+
+  <link href='static/frontpage/css/frontpage.css'
+        rel='stylesheet'>
+{% endblock %}
+
 {% block content %}
-<div>
-  <form action='/'
-        method='post'>{% csrf_token %}
-    {{ form.as_p }}
-    <input type='submit'
-           value='Submit'
-           class='btn btn-primary'/>
-  </form>
+<div class='container'>
+  <div class='logo-container'>
+    <h1>
+      Tracr.io
+      <small>The ballermost performance monitoring</small>
+    </h1>
+  </div>
+  <div class='form-container'>
+    <form action='/'
+          method='post'>{% csrf_token %}
+      {{ form }}
+      <input type='submit'
+             value='Submit'
+             class='btn btn-primary'/>
+    </form>
+  </div>
 </div>
 {% endblock %}

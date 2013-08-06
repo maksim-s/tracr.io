@@ -1,0 +1,16 @@
+.form-container, .logo-container {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.form-container label {
+  display: none;
+}
+
+.form-container input[type='text'] {
+  margin: 0 10px 0 0;
+}
+
+.logo-container h1 small {
+  display: block;
+}
