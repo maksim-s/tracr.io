@@ -56,15 +56,15 @@ class Context(object):
   @ensure_active_scope
   def leave_scope(self):
     self._active_scope.end()
-    self._active_scope = self._active_scope.parent
+    self._active_scope = self._active_scope.get_parent()
 
   @ensure_active_scope
   def update_scope_data(self, key, value):
     self._active_scope.update_data(key, value)
 
   @ensure_active_scope
-  def annotate(self, name, data):
-    self._active_scope.add_annotation(name, data)
+  def annotate(self, name, data=None):
+    self._active_scope.add_annotation(name, data=data)
 
   def mark(self, name):
     self._trace.add_mark(name)
@@ -84,3 +84,22 @@ class ContextManager(object):
     return self._thread_id_to_context.get(current_thread_id())
 
 manager = ContextManager()
+
+
+class ActiveContext(Context):
+  def __init__(self):
+    pass
+
+  def __getattr__(self, attr):
+    context = manager.get_context()
+    if not context:
+      return
+    return getattr(context, attr)
+
+  def __setattr__(self, attr, value):
+    context = manager.get_context()
+    if not context:
+      return
+    return setattr(context, attr, value)
+
+context = ActiveContext()

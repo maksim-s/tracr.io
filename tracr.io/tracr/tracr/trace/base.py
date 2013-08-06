@@ -34,7 +34,7 @@ class Trace(Serializable):
     EXTENDED = 1 # Is this an extension of a remote trace?
 
   def __init__(self, trace_id=None, parent_scope_id=None):
-    self._id = trace_id or uuid1()
+    self._id = trace_id or str(uuid1())
     self._parent_scope_id = parent_scope_id
     self._type = (Trace.Type.EXTENDED if (trace_id and parent_scope_id)
                   else Trace.Type.ROOT)

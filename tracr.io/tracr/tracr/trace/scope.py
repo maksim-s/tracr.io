@@ -67,6 +67,9 @@ class Scope(Serializable):
   def update_data(self, key, value):
     self._data[key] = value
 
+  def get_parent(self):
+    return self._parent
+
   @ensure_started
   def end(self):
     if not all(scope._end_time for scope in self._children):
