@@ -22,11 +22,12 @@ def instrument_model(klass, **kwargs):
   return klass
 
 def scope(object):
-  def __name__(self, name):
+  def __name__(self, name, data=None):
     self._name = name
+    self._data = data
 
   def __enter__(self):
-    scope = context.begin_scope(self._name)
+    scope = context.begin_scope(self._name, data=self._data)
     return scope
 
   def __exit__(self, *args, **kwargs):
