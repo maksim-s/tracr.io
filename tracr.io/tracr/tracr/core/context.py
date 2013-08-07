@@ -4,7 +4,8 @@ import thread
 from functools import wraps
 
 from tracr.conf import constants
-from tracr.core.exceptions import NoActiveScope
+from tracr.core.exceptions import (ContextMissing,
+                                   NoActiveScope)
 from tracr.trace import Trace
 
 
@@ -93,13 +94,13 @@ class ActiveContext(Context):
   def __getattr__(self, attr):
     context = manager.get_context()
     if not context:
-      return
+      raise ContextMissing
     return getattr(context, attr)
 
   def __setattr__(self, attr, value):
     context = manager.get_context()
     if not context:
-      return
+      raise ContextMissing
     return setattr(context, attr, value)
 
 context = ActiveContext()
