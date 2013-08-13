@@ -1,13 +1,13 @@
 from __future__ import absolute_import
 
-from datetime import datetime
-from time import mktime
+import time
+
 from uuid import UUID, uuid4
 
 
-def uuid1(time=None):
+def uuid1(_time=None):
   # Generate uuid based on utc, instead of machine clock
-  nanoseconds = int((time or mktime(datetime.utcnow().timetuple())) * 1e9)
+  nanoseconds = int((_time or time.time()) * 1e9)
 
   # 0x01b21dd213814000 is the number of 100-ns intervals between the
   # UUID epoch 1582-10-15 00:00:00 and the Unix epoch 1970-01-01 00:00:00.
