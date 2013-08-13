@@ -3,6 +3,7 @@
 /local/
 /lib/
 /share/
+*.sqlite3
 *.log
 *.pot
 *.pyc

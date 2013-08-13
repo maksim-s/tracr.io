@@ -53,6 +53,7 @@ class Context(object):
       scope = self._trace.create_scope(name, data=data)
     scope.start()
     self._active_scope = scope
+    return scope
 
   @ensure_active_scope
   def leave_scope(self):
@@ -83,6 +84,9 @@ class ContextManager(object):
 
   def get_context(self):
     return self._thread_id_to_context.get(current_thread_id())
+
+  def destroy_context(self):
+    self._thread_id_to_context.pop(current_thread_id(), None)
 
 manager = ContextManager()
 
