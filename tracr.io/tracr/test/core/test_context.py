@@ -1,18 +1,10 @@
-import json
 import threading
 import unittest
 
+from testing_utils import DummyRequest
 from tracr.conf import constants
 from tracr.core.context import current_thread_id, manager
 
-
-class DummyRequest(object):
-  def __init__(self):
-    self.META = {}
-
-  def set_tracr_header(self, trace_id, scope_id):
-    self.META[constants.HTTP_HEADER] = json.dumps({'tid': trace_id,
-                                                   'sid': scope_id})
 
 class TestContextManager(unittest.TestCase):
   def test_context(self, extended_trace=False):
@@ -47,7 +39,7 @@ class TestContextManager(unittest.TestCase):
     self.assertEqual(scope2._data['hello'], 'world')
     self.assertTrue(len(scope1._annotations) == 1)
     self.assertTrue(len(scope2._annotations) == 1)
-    
+
     manager.destroy_context()
 
   def test_context_for_extended_trace(self):
@@ -60,6 +52,6 @@ class TestContextManager(unittest.TestCase):
       threads.append(threading.Thread(target=
                                       self.test_context_for_extended_trace))
     for thread in threads:
-      thread.start()      
+      thread.start()
     for thread in threads:
       thread.join()
