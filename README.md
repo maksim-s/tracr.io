@@ -26,3 +26,9 @@ installed by running the following command:
 ```
 pip install -r requirements.txt
 ```
+
+To install Django run the following command:
+
+```
+./install_django.sh
+```

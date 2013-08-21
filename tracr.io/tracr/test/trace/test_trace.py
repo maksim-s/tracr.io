@@ -25,7 +25,7 @@ class TestDataStructure(unittest.TestCase):
     scope3 = trace.create_scope('scope3')
     scope3.start()
     scope3.end()
-    
+    self.assertTrue(len(trace._scopes) == 2)
     
   def test_invariant_violations(self):
     """ Tests failure cases when datastructure invariants are violated. """

@@ -1,7 +1,7 @@
 import unittest
 
 from tracr.handlers.base import Handler
-from tracr.middleware import TracrMiddleware
+from tracr.core.middleware import TracrMiddleware
 
 class TestMiddleware(unittest.TestCase):
   def setUp(self):

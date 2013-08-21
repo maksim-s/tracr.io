@@ -1,6 +1,6 @@
 from django.conf.urls import patterns
 
-urlpatterns = patterns('frontpage.views',
+urlpatterns = patterns('myapp.views',
     (r'^$', 'index'),
     )
 
