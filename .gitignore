@@ -3,6 +3,7 @@
 /local/
 /lib/
 /share/
+cache/
 *.log
 *.pot
 *.pyc

@@ -22,6 +22,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'compressor',
     'frontpage',
 )
 
@@ -62,7 +63,21 @@ USE_L10N = True
 
 USE_TZ = True
 
+if DEBUG:
+  INTERNAL_IPS = ('127.0.0.1',)
+
+COMPRESS_PRECOMPILERS = (
+    ('text/less', 'lessc {infile} {outfile}'),
+)
 
 STATIC_URL = '/static/'
+COMPRESS_ENABLED = False
+COMPRESS_OFFLINE = False
+COMPRESS_OUTPUT_DIR = 'static/cache'
 TEMPLATE_DIRS = os.path.join(BASE_DIR, 'templates/')
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)

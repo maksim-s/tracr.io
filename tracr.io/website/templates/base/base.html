@@ -1,3 +1,5 @@
+{% load compress %}
+
 <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'
 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
 <html lang='en' xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' class='njs'>
@@ -6,11 +8,21 @@
     <meta charset='utf-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
 
-    <!-- Loading Bootstrap -->
-    <link href='static/lib/Flat-UI/bootstrap/css/bootstrap.css' rel='stylesheet'>
+    {% compress css %}
+      <!-- Loading Bootstrap -->
+      <link href='/static/lib/Flat-UI/bootstrap/css/bootstrap.css'
+            rel='stylesheet/css'
+            type='text/css'
+            media='all'>
+    {% endcompress %}
 
-    <!-- Loading Flat UI -->
-    <link href='static/lib/Flat-UI/css/flat-ui.css' rel='stylesheet'>
+    {% compress css %}
+      <!-- Loading Flat UI -->
+      <link href='/static/lib/Flat-UI/less/flat-ui.less'
+            rel='stylesheet'
+            type='text/less'
+            media='all'>
+    {% endcompress %}
     {% block external %}
     {% endblock %}
   </head>

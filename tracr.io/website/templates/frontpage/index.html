@@ -1,10 +1,16 @@
 {% extends 'base/base.html' %}
 
+{% load compress %}
+
 {% block external %}
   {{ block.super }}
 
-  <link href='static/frontpage/css/frontpage.css'
-        rel='stylesheet'>
+  {% compress css %}
+    <link href='/static/frontpage/less/frontpage.less'
+          rel='stylesheet'
+          type='text/less'
+          media='all'>
+  {% endcompress %}
 {% endblock %}
 
 {% block content %}
