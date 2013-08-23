@@ -1,6 +1,6 @@
 from django.test import TestCase
+from tracr import instrument
 from tracr.core.context import manager
-from tracr.core.instrument import instrument_model
 
 from myapp.models import ModelA
 from myapp.tests import DummyRequest
@@ -11,7 +11,7 @@ class InstrumentTestCase(TestCase):
 
   def setUp(self):
     self.context = manager.create_context(DummyRequest())
-    instrument_model(ModelA)
+    instrument(ModelA)
 
   def test_instrument_model(self):
     scope = self.context.enter_scope('scope')

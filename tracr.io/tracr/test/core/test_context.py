@@ -2,7 +2,6 @@ import threading
 import unittest
 
 from testing_utils import DummyRequest
-from tracr.conf import constants
 from tracr.core.context import current_thread_id, manager
 
 

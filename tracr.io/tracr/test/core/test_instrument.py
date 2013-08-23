@@ -1,9 +1,9 @@
 import unittest
 
-from testing_utils import DummyRequest
+from tracr import instrument, scope
 from tracr.core.context import manager
-from tracr.core.instrument import instrument_function
-from tracr.core.instrument import scope
+
+from testing_utils import DummyRequest
 
 
 class DummyClass(object):
@@ -26,7 +26,7 @@ class TestFunctionInstrumentation(unittest.TestCase):
     self.context = manager.create_context(DummyRequest())
 
   def test_regular_function(self):
-    new_func = instrument_function(dummy_function)
+    new_func = instrument(dummy_function)
     ret_value = new_func()
     trace = self.context.get_trace()
     last_scope = trace._scopes[-1]
@@ -39,7 +39,7 @@ class TestFunctionInstrumentation(unittest.TestCase):
     self.assertEqual(query_time, 0)
 
   def test_method(self):
-    new_func = instrument_function(self.dummy_object.dummy_method)
+    new_func = instrument(self.dummy_object.dummy_method)
     ret_value = new_func()
     trace = self.context.get_trace()
     last_scope = trace._scopes[-1]
@@ -47,22 +47,20 @@ class TestFunctionInstrumentation(unittest.TestCase):
     self.assertEqual(last_scope._name,
                      'DummyClass:dummy_method')
 
-
   def test_generator_function(self):
-    new_func = instrument_function(self.dummy_object.dummy_generator)
+    new_func = instrument(self.dummy_object.dummy_generator)
     self.assertEqual(new_func, self.dummy_object.dummy_generator)
 
   def test_exception(self):
-    new_func = instrument_function(self.dummy_object.dummy_exception_function)
+    new_func = instrument(self.dummy_object.dummy_exception_function)
     try:
       new_func()
-    except Exception as e:
+    except Exception:
       trace = self.context.get_trace()
       last_scope = trace._scopes[-1]
       self.assertEqual(last_scope._name,
           'DummyClass:dummy_exception_function')
 
-class TestInstrumentFunctions(unittest.TestCase):
   def test_block_scope(self):
     request = DummyRequest()
     context = manager.create_context(request)

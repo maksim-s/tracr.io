@@ -4,3 +4,7 @@ class ContextMissing(Exception):
 
 class NoActiveScope(Exception):
   pass
+
+
+class TypeNotInstrumentable(Exception):
+  pass
