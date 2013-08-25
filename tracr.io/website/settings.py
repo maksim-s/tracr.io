@@ -65,14 +65,17 @@ USE_TZ = True
 
 if DEBUG:
   INTERNAL_IPS = ('127.0.0.1',)
+  COMPRESS_ENABLED = False
+  COMPRESS_OFFLINE = False
+else:
+  COMPRESS_ENABLED = True
+  COMPRESS_OFFLINE = True
 
 COMPRESS_PRECOMPILERS = (
     ('text/less', 'lessc {infile} {outfile}'),
 )
 
 STATIC_URL = '/static/'
-COMPRESS_ENABLED = False
-COMPRESS_OFFLINE = False
 COMPRESS_OUTPUT_DIR = 'cache'
 TEMPLATE_DIRS = os.path.join(BASE_DIR, 'templates/')
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)

@@ -4,12 +4,16 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 from frontpage.forms import EmailSubscriptionForm
+from frontpage.models import EmailSubscription
 
 def index(request):
   if request.method == 'POST':
     form = EmailSubscriptionForm(request.POST)
     if form.is_valid():
       # Save the email address and send an email.
+      email_subscription = EmailSubscription(form.email)
+      email_subscription.save()
+
       return HttpResponseRedirect('/thank-you/')
   else:
     form = EmailSubscriptionForm()

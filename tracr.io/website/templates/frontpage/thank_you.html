@@ -1,8 +1,26 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" class="njs">
-  <head>
-    <title>Test Frontpage</title>
-  </head>
-  <body>This is a test</body>
-</html>
+{% extends 'base/base.html' %}
+
+{% load compress %}
+{% load staticfiles %}
+
+{% block external %}
+  {{ block.super }}
+
+  {% compress css %}
+    <link href='{% static "frontpage/less/frontpage.less" %}'
+          rel='stylesheet'
+          type='text/less'
+          media='all'>
+  {% endcompress %}
+{% endblock %}
+
+{% block content %}
+<div class='container'>
+  <div class='logo-container'>
+    <h1>
+      Thank you!
+      <small>We will get in touch with you soon</small>
+    </h1>
+  </div>
+</div>
+{% endblock %}
