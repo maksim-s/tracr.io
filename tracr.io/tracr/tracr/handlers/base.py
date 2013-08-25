@@ -8,9 +8,9 @@ from tracr.core.context import manager
 from tracr.utils.inspect import get_stack
 
 
-# TODO(usmanm): Also send the stack frame when sending the signal.
 class Signal(Signal):
-  def __init__(self):
+  def __init__(self, enable_stack=False):
+    self.enable_stack = enable_stack
     super(Signal, self).__init__(
         providing_args=['duration', 'args', 'kwargs', 'exception', 'value',
                         'stack', 'context'])
@@ -27,9 +27,17 @@ class Signal(Signal):
         except Exception, e:
           exception = e
         duration = time.time() - start_time
-        self.send(sender=func, duration=duration, args=args, kwargs=kwargs,
-                  exception=exception, value=value, stack=get_stack(),
-                  context=manager.get_context())
+        kwargs = {
+          'sender': func,
+          'duration': duration,
+          'args': args,
+          'kwargs': kwargs,
+          'exception': exception,
+          'value': value,
+          'stack': get_stack() if self.enable_stack else None,
+          'context': manager.get_context()
+          }
+        self.send(**kwargs)
         if exception:
           raise exception
         return value
