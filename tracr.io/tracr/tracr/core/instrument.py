@@ -25,11 +25,12 @@ def _annotate_function(func, annotation_prefix):
       value = e
       raise_value = True
     annotation_data = {
-      'duration': time.time() - start_time,
-      'module': func.__module__
+      '$duration': time.time() - start_time,
+      '$module': func.__module__,
+      '$source': '_annotate_function'
       }
     if raise_value:
-      annotation_data['exception'] = str(e)
+      annotation_data['$exception'] = str(e)
     tracr.annotate('%s:%s' % (annotation_prefix, func.__name__),
                    annotation_data)
     if raise_value:
@@ -45,8 +46,7 @@ def _instrument_function(func, **kwargs):
   @wraps(func)
   def wrapper(*args, **kwargs):
     function_name = func.__name__
-    module_name = func.__module__
-    data = {'module': module_name}
+    data = {'$module': func.__module__}
     scope_name = function_name
     if hasattr(func, 'im_class'):
       # The function is a method of some class.
@@ -62,7 +62,7 @@ def _instrument_function(func, **kwargs):
     try:
       return_value = func(*args, **kwargs)
     except Exception as e:
-      tracr.update_scope_data('exception', e.__class__.__name__)
+      tracr.update_scope_data('$exception', str(e))
       func_exception = e
     end_queries = set(connection.queries)
     function_queries = end_queries - start_queries
@@ -76,7 +76,6 @@ def _instrument_function(func, **kwargs):
     if func_exception:
       raise func_exception
     return return_value
-
   return wrapper
 
 
