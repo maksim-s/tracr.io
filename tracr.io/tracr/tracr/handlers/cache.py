@@ -90,46 +90,48 @@ class CacheHandler(Handler):
     cache = CacheWrapper(cache)
     get_cache = get_cache_wrapper
 
-  def _receiver(self, sender, *args, **kwargs):
+  def _receiver(self, sender, duration=None, value=None, exception=None,
+                args=None, kwargs=None, *args, **kwargs):
     method_name = sender.__name__
-    cache_key = kwargs['kwargs'].get('key', kwargs['args'][1])
-    page_request = 'views.decorators.cache.cache_page' in cache_key
-    header_request = 'views.decorators.cache.cache_header' in cache_key
-    if method_name == 'get':
-      if kwargs['value'] is None:
-        tracr.annotate('CacheHandler:cache_miss',
-                       data={'$duration': kwargs['duration'],
-                             '$source': 'CacheHandler',
-                             'page': page_request,
-                             'header': header_request})
-      else:
-        tracr.annotate('CacheHandler:cache_hit',
-                       data={'$duration': kwargs['duration'],
-                             '$source': 'CacheHandler',
-                             'page': page_request,
-                             'header': header_request})
-    elif method_name == 'get_many':
-      hits = misses = 0
-      for value in kwargs['value'].itervalues():
+    if not exception:
+      if method_name == 'get':
+        cache_key = kwargs['kwargs'].get('key', kwargs['args'][1])
+        page_request = 'views.decorators.cache.cache_page' in cache_key
+        header_request = 'views.decorators.cache.cache_header' in cache_key
         if value is None:
-          misses += 1
+          tracr.annotate('CacheHandler:cache_miss',
+                         data={'$duration': duration,
+                               '$source': 'CacheHandler',
+                               'page': page_request,
+                               'header': header_request})
         else:
-          hits += 1
-      if misses:
-        tracr.annotate('CacheHandler:cache_miss',
-                       data={'$duration': kwargs['duration'],
-                             '$source': 'CacheHandler',
-                             'items': misses})
-      if hits:
-        tracr.annotate('CacheHandler:cache_hit',
-                       data={'$duration': kwargs['duration'],
-                             '$source': 'CacheHandler',
-                             'items': hits})
-    data = {'$duration': kwargs['duration'],
+          tracr.annotate('CacheHandler:cache_hit',
+                         data={'$duration': duration,
+                               '$source': 'CacheHandler',
+                               'page': page_request,
+                               'header': header_request})
+      elif method_name == 'get_many':
+        hits = misses = 0
+        for value in value.itervalues():
+          if value is None:
+            misses += 1
+          else:
+            hits += 1
+        if misses:
+          tracr.annotate('CacheHandler:cache_miss',
+                         data={'$duration': duration,
+                               '$source': 'CacheHandler',
+                               'num': misses})
+        if hits:
+          tracr.annotate('CacheHandler:cache_hit',
+                         data={'$duration': duration,
+                               '$source': 'CacheHandler',
+                               'num': hits})
+    data = {'$duration': duration,
             '$module': sender.__module__,
             '$source': 'CacheHandler'}
-    if kwargs['exception']:
-      data['$exception'] = str(kwargs['exception'])
+    if exception:
+      data['$exception'] = str(exception)
     tracr.annotate('%s:%s' % (sender.__class__.__name__, sender.__name__),
                    data=data)
 

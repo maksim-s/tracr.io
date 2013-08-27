@@ -23,7 +23,7 @@ class TestInspectUtils(unittest.TestCase):
       self.assertEqual(frame.function_name, 'test_get_trace')
       self.assertEqual(frame.file_path.rstrip('c'), FILE_PATH)
       self.assertEqual(frame.line_num, 32)
-      stack = get_stack(depth=1)
+      stack = get_stack(depth=1) # This should be the line number.
       self.assertEqual(len(stack), 1)
       frame = stack[0]
       self.assertEqual(frame.function_name, 'function1')
