@@ -99,11 +99,13 @@ class CacheHandler(Handler):
       if kwargs['value'] is None:
         tracr.annotate('CacheHandler:cache_miss',
                        data={'$duration': kwargs['duration'],
+                             '$source': 'CacheHandler',
                              'page': page_request,
                              'header': header_request})
       else:
         tracr.annotate('CacheHandler:cache_hit',
                        data={'$duration': kwargs['duration'],
+                             '$source': 'CacheHandler',
                              'page': page_request,
                              'header': header_request})
     elif method_name == 'get_many':
@@ -116,10 +118,12 @@ class CacheHandler(Handler):
       if misses:
         tracr.annotate('CacheHandler:cache_miss',
                        data={'$duration': kwargs['duration'],
+                             '$source': 'CacheHandler',
                              'items': misses})
       if hits:
         tracr.annotate('CacheHandler:cache_hit',
                        data={'$duration': kwargs['duration'],
+                             '$source': 'CacheHandler',
                              'items': hits})
     data = {'$duration': kwargs['duration'],
             '$module': sender.__module__,
