@@ -45,8 +45,7 @@ def _instrument_function(func, **kwargs):
   @wraps(func)
   def wrapper(*args, **kwargs):
     function_name = func.__name__
-    module_name = func.__module__
-    data = {'module': module_name}
+    data = {'module': func.__module__}
     scope_name = function_name
     if hasattr(func, 'im_class'):
       # The function is a method of some class.
