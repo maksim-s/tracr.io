@@ -26,7 +26,6 @@ class FrameInfo(object):
 def get_stack(depth=None, include_django=True):
   frame = sys._getframe(1) # Don't fetch frame for `get_stack`
   frames = []
-  frame_num = 0
   while frame:
     frame_info = FrameInfo(frame)
     frame = frame.f_back
@@ -36,8 +35,7 @@ def get_stack(depth=None, include_django=True):
     if not include_django and frame_info.file_path.startswith(DJANGO_PATH):
       # Ignore frames for Django functions.
       continue
-    if depth is not None and frame_num >= depth:
-      break
     frames.append(frame_info)
-    frame_num += 1
+    if len(frames) == depth:
+      break
   return frames
