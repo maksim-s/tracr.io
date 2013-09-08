@@ -8,6 +8,10 @@ from handlers.base import Handler
 import tracr
 
 def record_sql(func):
+  """
+  Decorator that creates annotations for the decorated function
+  with all the SQL information.
+  """
   @wraps(func)
   def new_func(*args, **kwargs):
     function_name = func.__name__
