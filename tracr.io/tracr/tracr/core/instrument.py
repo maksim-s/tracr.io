@@ -56,16 +56,17 @@ def _instrument_function(func, **kwargs):
     # TODO(maksims): Make sure that connections are not shared
     # between requests. Also Django only records queries if DEBUG
     # is set to True, so we need to do something about it.
-    start_queries = set(connection.queries)
+    start_queries = list(connection.queries)
     tracr.enter_scope(scope_name, data)
     try:
       return_value = func(*args, **kwargs)
     except Exception as e:
       tracr.update_scope_data('$exception', str(e))
       func_exception = e
-    end_queries = set(connection.queries)
-    function_queries = end_queries - start_queries
-    queries_time = sum(query['time'] for query in function_queries)
+    end_queries = list(connection.queries)
+    function_queries = list(ifilter(lambda q: q not in start_queries,
+                                    end_queries))
+    queries_time = sum(float(query['time']) for query in function_queries)
     query_data = {
         'total_number': len(function_queries),
         'total_time': queries_time

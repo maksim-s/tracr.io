@@ -1,4 +1,5 @@
 from functools import wraps
+from itertools import ifilter
 
 from django.conf import settings
 from django.db import connection
@@ -22,7 +23,7 @@ def record_sql(func):
       class_name = func.im_class.__name__
       scope_name = '%s:%s' % (class_name, function_name)
     exception = None
-    start_queries = set(connection.queries)
+    start = list(connection.queries)
     try:
       value = func(*args, **kwargs)
     except Exception as e:
@@ -30,9 +31,9 @@ def record_sql(func):
         '$exception': str(e),
         '$source': 'SqlHandler'})
       exception = e
-    end_queries = set(connection.queries)
-    function_queries = end_queries - start_queries
-    queries_time = sum(query['time'] for query in function_queries)
+    end = list(connection.queries)
+    function_queries = list(ifilter(lambda q: q not in start, end))
+    queries_time = sum(float(query['time']) for query in function_queries)
     query_data = {
         '$source': 'SqlHandler',
         'total_number': len(function_queries),
@@ -43,6 +44,7 @@ def record_sql(func):
       raise exception
     return value
   return new_func
+
 
 class SqlHandler(Handler):
   # TODO(maksims): not sure what to do when a connection can be shared.
