@@ -21,17 +21,20 @@ class InstrumentTestCase(TestCase):
     self.assertEqual(scope._annotations[-1]._name, 'ModelA:save')
     a.foreign
     self.assertTrue(len(scope._annotations) == 2)
-    self.assertEqual(scope._annotations[-1]._name, 
-                     'ModelA:foreign:get_queryset')
+    self.assertTrue(scope._annotations[-1]._name in
+        ('ModelA:foreign:get_queryset', 'ModelA:foreign:get_query_set'))
     a.o2o
     self.assertTrue(len(scope._annotations) == 3)
-    self.assertEqual(scope._annotations[-1]._name, 'ModelA:o2o:get_queryset')
+    self.assertTrue(scope._annotations[-1]._name in
+        ('ModelA:o2o:get_queryset', 'ModelA:o2o:get_query_set'))
     a.o2m.all()
     self.assertTrue(len(scope._annotations) == 4)
-    self.assertEqual(scope._annotations[-1]._name, 'ModelA:o2m:get_queryset')
+    self.assertTrue(scope._annotations[-1]._name in
+        ('ModelA:o2m:get_queryset', 'ModelA:o2m:get_query_set'))
     a.m2m.all()
     self.assertTrue(len(scope._annotations) == 5)
-    self.assertEqual(scope._annotations[-1]._name, 'ModelA:m2m:get_queryset')
+    self.assertTrue(scope._annotations[-1]._name in
+        ('ModelA:m2m:get_queryset', 'ModelA:m2m:get_query_set'))
     self.context.leave_scope()
 
     # Test with prefetch/select related.
@@ -40,12 +43,16 @@ class InstrumentTestCase(TestCase):
          .select_related('foreign', 'o2o')
          .prefetch_related('o2m', 'm2m')).order_by('?')[0]
     self.assertTrue(len(scope._annotations) == 4)
-    self.assertEqual({'ModelA:o2m:get_prefetch_queryset',
-                      'ModelA:o2m:get_queryset',
-                      'ModelA:m2m:get_prefetch_queryset',
-                      'ModelA:m2m:get_queryset'},
-                     {annotation._name for annotation in scope._annotations})
+    self.assertTrue({annotation._name for annotation in scope._annotations} in
+                     ({'ModelA:o2m:get_prefetch_queryset',
+                       'ModelA:o2m:get_queryset',
+                       'ModelA:m2m:get_prefetch_queryset',
+                       'ModelA:m2m:get_queryset'},
+                      {'ModelA:o2m:get_prefetch_query_set',
+                       'ModelA:o2m:get_query_set',
+                       'ModelA:m2m:get_prefetch_query_set',
+                       'ModelA:m2m:get_query_set'}))
     a.foreign
     a.o2o
     self.assertTrue(len(scope._annotations) == 4)
-    
+

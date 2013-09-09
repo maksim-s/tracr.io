@@ -3,7 +3,7 @@ from functools import wraps
 from django.conf import settings
 from django.db import connection
 
-from handlers.base import Handler
+from tracr.handlers.base import Handler
 
 import tracr
 

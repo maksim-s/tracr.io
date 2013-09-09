@@ -92,17 +92,31 @@ def _instrument_model(klass, **kwargs):
     if RELATED_ATTR_CLASS_RE.match(attr_class_name) is None:
       continue
     if hasattr(attr, 'get_queryset'):
-      attr.get_queryset = _annotate_function(attr.get_queryset,
-                                             '%s:%s' % (klass_name, attr_name))
+      attr.get_queryset = _annotate_function(
+          attr.get_queryset,
+          '%s:%s' % (klass_name, attr_name))
       attr.get_prefetch_queryset = _annotate_function(
           attr.get_prefetch_queryset,
           '%s:%s' % (klass_name, attr_name))
-    elif hasattr(attr, 'related_manager_cls'):
-      attr.related_manager_cls.get_queryset = _annotate_function(
-          attr.related_manager_cls.get_queryset,
+    # For backwards compatibility.
+    elif hasattr(attr, 'get_query_set'):
+      attr.get_query_set = _annotate_function(
+          attr.get_query_set,
           '%s:%s' % (klass_name, attr_name))
-      attr.related_manager_cls.get_prefetch_queryset = _annotate_function(
-          attr.related_manager_cls.get_prefetch_queryset,
+      attr.get_prefetch_query_set = _annotate_function(
+          attr.get_prefetch_query_set,
+          '%s:%s' % (klass_name, attr_name))
+    elif hasattr(attr, 'related_manager_cls'):
+      if hasattr(attr.related_manager_cls, 'get_queryset'):
+        attr.related_manager_cls.get_queryset = _annotate_function(
+            attr.related_manager_cls.get_queryset,
+            '%s:%s' % (klass_name, attr_name))
+      elif hasattr(attr.related_manager_cls, 'get_query_set'):
+        attr.related_manager_cls.get_query_set = _annotate_function(
+            attr.related_manager_cls.get_query_set,
+            '%s:%s' % (klass_name, attr_name))
+      attr.related_manager_cls.get_prefetch_query_set = _annotate_function(
+          attr.related_manager_cls.get_prefetch_query_set,
           '%s:%s' % (klass_name, attr_name))
   return klass
 

@@ -12,3 +12,4 @@ class DummyRequest(object):
 
 # Import all test cases here.
 from myapp.tests.instrument import InstrumentTestCase
+from myapp.tests.handler import SqlHandlerTestCase
