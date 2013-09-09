@@ -93,6 +93,8 @@ manager = ContextManager()
 
 class ActiveContext(Context):
   def __init__(self):
+    # Need to override __init__ method so that we don't call the parent class's
+    # __init__ method.
     pass
 
   def __getattr__(self, attr):
